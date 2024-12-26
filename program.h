@@ -1,3 +1,10 @@
+/*
+GRUP 57
+1. ÖĞRETİM C GRUBU
+B221210069 Seray Eğe 
+B221210015 Yüsra Şengün
+*/
+
 #ifndef PROGRAM_H
 #define PROGRAM_H
 

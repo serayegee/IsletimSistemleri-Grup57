@@ -1,3 +1,10 @@
+/*
+GRUP 57
+1. ÖĞRETİM C GRUBU
+B221210069 Seray Eğe 
+B221210015 Yüsra Şengün
+*/
+
 #include "program.h"
 
 /* --- Prompt --- */
@@ -74,12 +81,12 @@ void parse_pipelines_and_execute(char *command) {
 
         for (int j = 0; j < i; j++) {
             pipe(pipe_fd);                 // Her bir komut arasında bir pipe oluşturulur
-            pid_t pid = fork();             // Fork çağrılıp çocuk süreç başlatılır
+            pid_t pid = fork();             // Fork çağrılıp çocuk proses başlatılır
 
 
             if (pid == 0) {
                 dup2(in_fd, STDIN_FILENO);
-                if (j < i - 1) {                         // Çocuk süreçte giriş çıkış yönlendirilmeleri STDOUT,STDIN ile
+                if (j < i - 1) {                         // Çocuk proseste giriş çıkış yönlendirilmeleri STDOUT,STDIN ile
            dup2(pipe_fd[1], STDOUT_FILENO);                      // giriş çıkış yönlendirilmeleri yapılır
                                                               // Ardından komutlar çalıştırılır
                 }
@@ -90,8 +97,8 @@ void parse_pipelines_and_execute(char *command) {
                 execvp(args[0], args);
                 perror("Pipeline exec failed");
                 exit(EXIT_FAILURE);
-            } else {                                    // Ebeveyn süreç başlatılır
-                wait(NULL);                           // Çocuk sürecinin bitilmesi beklenilir
+            } else {                                    // Ebeveyn proses başlatılır
+                wait(NULL);                           // Çocuk prosesin bitilmesi beklenilir
                 close(pipe_fd[1]);                    // Yazma ucu kapatılır
                 in_fd = pipe_fd[0];                       // Okuma ucunu bir sonraki komuta yönlendirilir
             }
@@ -155,7 +162,7 @@ int execute_args(char **args) {
         return own_exit(args);
     }
 
-	//Diğer komutlar için yeni proses başlatma
+	// Diğer komutlar için yeni proses başlatma
     return new_process(args);
 }
 
@@ -171,7 +178,7 @@ int new_process(char **args) {
     } else if (pid < 0) {
         perror("Fork başarısız");
     } else {
-        waitpid(pid, &status, 0);	// Ebeveyn süreç çocuk sürecin bitmesini bekler
+        waitpid(pid, &status, 0);	// Ebeveyn proses çocuk prosesin bitmesini bekler
     }
 
     return 0;
@@ -217,14 +224,14 @@ int own_exit(char **args) {
 int arkaPlandaCalistir(char **args) {
     pid_t pid = fork(); 	// Yeni proses
     if (pid == 0) {
-        // Çocuk süreçte komutu çalıştır
+        // Çocuk proseste komutu çalıştır
         execvp(args[0], args);
         perror("Komut çalıştırılamadı");
         exit(EXIT_FAILURE);
     } else if (pid < 0) {
         perror("Fork başarısız");
     } else {
-        // Ebeveyn süreç, hemen yeni komut almak için devam eder
+        // Ebeveyn proses, hemen yeni komut almak için devam eder
         printf("[%d] arka planda çalışıyor\n", pid);
     }
     return 0;

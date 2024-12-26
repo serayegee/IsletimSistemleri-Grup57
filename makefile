@@ -15,3 +15,4 @@ clean:
 
 run: program
 	./program
+
